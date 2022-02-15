@@ -1,0 +1,24 @@
+﻿<Page x:Class="WpfApp15.Pages.OptionPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp15.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="OptionPage">
+    <StackPanel>
+        <Label Content="Сервер бд"/>
+        <TextBox Text="{Binding Server}"/>
+        <Label Content="Название бд"/>
+        <TextBox Text="{Binding DB}"/>
+        <Label Content="Логин"/>
+        <TextBox Text="{Binding User}"/>
+        <Label Content="Пароль"/>
+        <PasswordBox x:Name="passwordBox"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Тест связи" Command="{Binding TestConnection}"/>
+            <Button Content="Сохранить" Command="{Binding SaveSettings}"/>
+        </StackPanel>
+    </StackPanel>
+</Page>
