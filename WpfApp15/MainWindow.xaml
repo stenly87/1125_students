@@ -12,7 +12,16 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Menu>
-            <MenuItem Header=""/>
+            <MenuItem Header="Справочники">
+                <MenuItem Header="Группы">
+                    <MenuItem Header="Создать группу" Command="{Binding CreateGroup}"/>
+                    <MenuItem Header="Список групп" Command="{Binding ViewGroups}"/>
+                </MenuItem>
+                <MenuItem Header="Студенты">
+                    <MenuItem Header="Создать студента"/>
+                    <MenuItem Header="Список студентов"/>
+                </MenuItem>
+            </MenuItem>
         </Menu>
         <Frame Content="{Binding CurrentPage}" Grid.Row="1" NavigationUIVisibility="Hidden"/>
     </Grid>

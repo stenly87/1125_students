@@ -18,7 +18,7 @@ namespace WpfApp15
             return db;
         }
 
-        protected MySqlConnection sqlConnection = null;
+        internal MySqlConnection sqlConnection = null;
 
         internal void InitConnection()
         {
@@ -79,6 +79,23 @@ namespace WpfApp15
                 }
                 CloseConnection();
             }
+        }
+
+        internal int GetNextID(string table)
+        {
+            int result = 0;
+            //SHOW TABLE STATUS WHERE `Name` = 'group'
+            if (OpenConnection())
+            {
+                using (MySqlCommand mc = new MySqlCommand($"SHOW TABLE STATUS WHERE `Name` = '{table}'", sqlConnection))
+                using (MySqlDataReader dr = mc.ExecuteReader())
+                {
+                    dr.Read();
+                    result = dr.GetInt32("Auto_increment");
+                }
+                CloseConnection();
+            }
+            return result;
         }
     }
 }

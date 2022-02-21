@@ -6,22 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using WpfApp15.Pages;
+using WpfApp15.Tools;
 
 namespace WpfApp15.ViewModels
 {
     class MainVM : INotifyPropertyChanged
     {
-        private Page currentPage;
+        CurrentPageControl currentPageControl;
 
         public Page CurrentPage
         {
-            get => currentPage;
-            set
-            {
-                currentPage = value;
-                Signal(nameof(CurrentPage));
-            }
+            get => currentPageControl.Page;
         }
+
+        public CommandVM CreateGroup { get; set; }
+        public CommandVM ViewGroups { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -32,8 +31,20 @@ namespace WpfApp15.ViewModels
 
         public MainVM()
         {
-            CurrentPage = new OptionPage();
+            currentPageControl = new CurrentPageControl();
+            currentPageControl.PageChanged += CurrentPageControl_PageChanged;
+            currentPageControl.SetPage(new OptionPage());
+            CreateGroup = new CommandVM(()=> {
+                currentPageControl.SetPage(new EditGroupPage(new EditGroupVM(currentPageControl)));
+            });
+            ViewGroups = new CommandVM(()=> {
+                currentPageControl.SetPage(new ViewGroupsPage());
+            });
+        }
 
+        private void CurrentPageControl_PageChanged(object sender, EventArgs e)
+        {
+            Signal(nameof(CurrentPage));
         }
     }
 }
