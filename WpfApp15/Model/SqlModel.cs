@@ -48,11 +48,47 @@ namespace WpfApp15.Model
         public void Delete<T>(T value) where T : BaseDTO
         {
             var type = value.GetType();
-            var tableAtrributes = type.GetCustomAttributes(typeof(TableAttribute), false);
-            string table = ((TableAttribute)tableAtrributes.First()).Table;
+            string table = GetTableName(type);
             var db = MySqlDB.GetDB();
             string query = $"delete from `{table}` where id = {value.ID}";
             db.ExecuteNonQuery(query);
+        }
+
+        public int GetNumRows(Type type)
+        {
+            string table = GetTableName(type);
+            return MySqlDB.GetDB().GetRowsCount(table);
+        }
+
+        private static string GetTableName(Type type)
+        {
+            var tableAtrributes = type.GetCustomAttributes(typeof(TableAttribute), false);
+            return ((TableAttribute)tableAtrributes.First()).Table;
+        }
+
+        public List<Group> SelectGroupsRange(int skip, int count)
+        {
+            var groups = new List<Group>();
+            var mySqlDB = MySqlDB.GetDB();
+            string query = $"SELECT * FROM `group` LIMIT {skip},{count}";
+            if (mySqlDB.OpenConnection())
+            {
+                using (MySqlCommand mc = new MySqlCommand(query, mySqlDB.sqlConnection))
+                using (MySqlDataReader dr = mc.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        groups.Add(new Group
+                        {
+                            ID = dr.GetInt32("id"),
+                            Title = dr.GetString("title"),
+                            Year = dr.GetInt32("year")
+                        });
+                    }
+                }
+                mySqlDB.CloseConnection();
+            }
+            return groups;
         }
 
         private static (string, MySqlParameter[]) CreateInsertQuery(string table, List<(string, object)> values)

@@ -10,7 +10,7 @@ using WpfApp15.Tools;
 
 namespace WpfApp15.ViewModels
 {
-    class MainVM : INotifyPropertyChanged
+    class MainVM : BaseVM
     {
         CurrentPageControl currentPageControl;
 
@@ -21,13 +21,6 @@ namespace WpfApp15.ViewModels
 
         public CommandVM CreateGroup { get; set; }
         public CommandVM ViewGroups { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        void Signal(string property)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
-        }
 
         public MainVM()
         {

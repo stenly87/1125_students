@@ -8,6 +8,10 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ViewGroupsPage">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <ListView ItemsSource="{Binding Groups}">
             <ListView.View>
                 <GridView>
@@ -16,5 +20,23 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Grid Grid.Row="1" HorizontalAlignment="Center" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Предыдущие" Command="{Binding ViewBack}"/>
+            <ListBox Grid.Column="1" MinWidth="200" MaxWidth="500" ItemsSource="{Binding PageIndexes}" SelectedItem="{Binding SelectedIndex}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            <Button Grid.Column="2" Content="Следующие" Command="{Binding ViewForward}"/>
+            <ComboBox Grid.Column="3" SelectedItem="{Binding ViewRowsCount}" ItemsSource="{Binding RowsCountVariants}" />
+        </Grid>
     </Grid>
 </Page>

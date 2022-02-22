@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using WpfApp15.Model;
 using WpfApp15.Tools;
 
 namespace WpfApp15.ViewModels

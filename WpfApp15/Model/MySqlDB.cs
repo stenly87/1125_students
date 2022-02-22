@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp15
+namespace WpfApp15.Model
 {
     public class MySqlDB
     {
@@ -83,6 +83,17 @@ namespace WpfApp15
 
         internal int GetNextID(string table)
         {
+            string column = "Auto_increment";
+            return GetTableInfo(table, column);
+        }
+        internal int GetRowsCount(string table)
+        {
+            string column = "Rows";
+            return GetTableInfo(table, column);
+        }
+
+        private int GetTableInfo(string table, string column)
+        {
             int result = 0;
             //SHOW TABLE STATUS WHERE `Name` = 'group'
             if (OpenConnection())
@@ -91,7 +102,7 @@ namespace WpfApp15
                 using (MySqlDataReader dr = mc.ExecuteReader())
                 {
                     dr.Read();
-                    result = dr.GetInt32("Auto_increment");
+                    result = dr.GetInt32(column);
                 }
                 CloseConnection();
             }
