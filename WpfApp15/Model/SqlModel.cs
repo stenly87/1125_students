@@ -20,6 +20,35 @@ namespace WpfApp15.Model
             return sqlModel;
         }
 
+        internal List<Student> SelectStudentsByGroup(Group selectedGroup)
+        {
+            int id = selectedGroup?.ID ?? 0;
+            var students = new List<Student>();
+            var mySqlDB = MySqlDB.GetDB();
+            string query = $"SELECT * FROM `student` WHERE group_id = {id}";
+            if (mySqlDB.OpenConnection())
+            {
+                using (MySqlCommand mc = new MySqlCommand(query, mySqlDB.sqlConnection))
+                using (MySqlDataReader dr = mc.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        students.Add(new Student
+                        {
+                            ID = dr.GetInt32("id"),
+                            FirstName = dr.GetString("firstName"),
+                            LastName = dr.GetString("lastName"),
+                            PatronymicName = dr.GetString("patronymicName"),
+                            GroupId = dr.GetInt32("group_id"),
+                            Birthday = dr.GetDateTime("birthday")
+                        });
+                    }
+                }
+                mySqlDB.CloseConnection();
+            }
+            return students;
+        }
+
         //INSERT INTO `group` set title='1125', year = 2018;
         // возвращает ID добавленной записи
         public int Insert<T>(T value)

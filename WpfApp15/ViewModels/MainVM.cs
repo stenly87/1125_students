@@ -21,17 +21,25 @@ namespace WpfApp15.ViewModels
 
         public CommandVM CreateGroup { get; set; }
         public CommandVM ViewGroups { get; set; }
+        public CommandVM CreateStudent { get; set; }
+        public CommandVM ViewStudents { get; set; }
 
         public MainVM()
         {
             currentPageControl = new CurrentPageControl();
             currentPageControl.PageChanged += CurrentPageControl_PageChanged;
             currentPageControl.SetPage(new OptionPage());
-            CreateGroup = new CommandVM(()=> {
+            CreateGroup = new CommandVM(() => {
                 currentPageControl.SetPage(new EditGroupPage(new EditGroupVM(currentPageControl)));
             });
-            ViewGroups = new CommandVM(()=> {
+            ViewGroups = new CommandVM(() => {
                 currentPageControl.SetPage(new ViewGroupsPage());
+            });
+            CreateStudent = new CommandVM(() => {
+                currentPageControl.SetPage(new EditStudentPage(new EditStudentVM(currentPageControl)));
+            });
+            ViewStudents = new CommandVM(()=> {
+                currentPageControl.SetPage(new ViewStudentsPage(null));
             });
         }
 

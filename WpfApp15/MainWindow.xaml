@@ -18,8 +18,8 @@
                     <MenuItem Header="Список групп" Command="{Binding ViewGroups}"/>
                 </MenuItem>
                 <MenuItem Header="Студенты">
-                    <MenuItem Header="Создать студента"/>
-                    <MenuItem Header="Список студентов"/>
+                    <MenuItem Header="Создать студента" Command="{Binding CreateStudent}"/>
+                    <MenuItem Header="Список студентов" Command="{Binding ViewStudents}"/>
                 </MenuItem>
             </MenuItem>
         </Menu>
