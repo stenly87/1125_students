@@ -1,0 +1,40 @@
+﻿<Page x:Class="WpfApp15.Pages.ViewValuesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp15.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ViewValuesPage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Width="200">
+                <Label Content="Дисциплина"/>
+                <ComboBox ItemsSource="{Binding DisciplineArray}" 
+                  SelectedItem="{Binding SelectedDiscipline}"
+                  DisplayMemberPath="Title"/>
+            </StackPanel>
+            <StackPanel Width="200">
+                <Label Content="Группа"/>
+                <ComboBox ItemsSource="{Binding GroupArray}" 
+                  SelectedItem="{Binding SelectedGroup}"
+                  DisplayMemberPath="Title"/>
+            </StackPanel>
+        </StackPanel>
+        <ListView Grid.Row="1" ItemsSource="{Binding ValuesArray}" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Студент" DisplayMemberBinding="{Binding Student.LastName}"/>
+                    <GridViewColumn Header="Дисциплина" DisplayMemberBinding="{Binding Discipline.Title}"/>
+                    <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding Day, StringFormat=dd.MM.yyyy}"/>
+                    <GridViewColumn Header="Оценка" DisplayMemberBinding="{Binding Value}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Page>

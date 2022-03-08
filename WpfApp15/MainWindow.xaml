@@ -21,6 +21,10 @@
                     <MenuItem Header="Создать студента" Command="{Binding CreateStudent}"/>
                     <MenuItem Header="Список студентов" Command="{Binding ViewStudents}"/>
                 </MenuItem>
+                <MenuItem Header="Журнал">
+                    <MenuItem Header="Выставление оценок" Command="{Binding StudentValues}"/>
+                    <MenuItem Header="Просмотр оценок" Command="{Binding ViewStudentValues}"/>
+                </MenuItem>
             </MenuItem>
         </Menu>
         <Frame Content="{Binding CurrentPage}" Grid.Row="1" NavigationUIVisibility="Hidden"/>

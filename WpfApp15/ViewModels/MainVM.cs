@@ -24,6 +24,9 @@ namespace WpfApp15.ViewModels
         public CommandVM CreateStudent { get; set; }
         public CommandVM ViewStudents { get; set; }
 
+        public CommandVM StudentValues { get; set; }
+        public CommandVM ViewStudentValues { get; set; }
+
         public MainVM()
         {
             currentPageControl = new CurrentPageControl();
@@ -40,6 +43,15 @@ namespace WpfApp15.ViewModels
             });
             ViewStudents = new CommandVM(()=> {
                 currentPageControl.SetPage(new ViewStudentsPage(null));
+            });
+
+            StudentValues = new CommandVM(()=> {
+                currentPageControl.SetPage(new AddValuesPage());
+            });
+
+            ViewStudentValues = new CommandVM(() =>
+            {
+                currentPageControl.SetPage(new ViewValuesPage());
             });
         }
 
