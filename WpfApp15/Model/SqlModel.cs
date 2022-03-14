@@ -49,6 +49,137 @@ namespace WpfApp15.Model
             return result;
         }
 
+        internal List<Group> SelectGroupsByDiscipline(Discipline discipline, int month, int year)
+        {
+            DateTime startDate = new DateTime(year, month, 1);
+            DateTime endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+            string query = $"SELECT DISTINCT(title), g.id as 'id' FROM `group` g, journal j, student s WHERE j.student_id = s.id AND s.group_id = g.id AND j.discipline_id = " + discipline.ID + $" and day >= '{startDate.ToShortDateString()}' and day <= '{endDate.ToShortDateString()}'";
+            List<Group> result = new List<Group>();
+            var mySqlDB = MySqlDB.GetDB();
+            if (mySqlDB.OpenConnection())
+            {
+                using (MySqlCommand mc = new MySqlCommand(query, mySqlDB.sqlConnection))
+                using (MySqlDataReader dr = mc.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        result.Add(new Group { 
+                            ID = dr.GetInt32("id"),
+                            Title = dr.GetString("title") 
+                        });
+                    }
+                }
+                mySqlDB.CloseConnection();
+            }
+
+            return result;
+        }
+
+        internal int SelectCountStudentsInGroup(Group group)
+        {
+            int result = 0; 
+            var mySqlDB = MySqlDB.GetDB();
+            string query = $"SELECT count(*) FROM student WHERE group_id = " + group.ID;
+            if (mySqlDB.OpenConnection())
+            {
+                using (MySqlCommand mc = new MySqlCommand(query, mySqlDB.sqlConnection))
+                using (MySqlDataReader dr = mc.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        result = dr.GetInt32(0);
+                    }
+                }
+                mySqlDB.CloseConnection();
+            }
+            return result;
+        }
+
+        internal Dictionary<Discipline, List<Journal>> SelectJournalByDisciplinesAndMonth(List<Discipline> disciplinesPrepod, int month, int year)
+        {
+            Dictionary<Discipline, List<Journal>> result = new Dictionary<Discipline, List<Journal>>();
+            var mySqlDB = MySqlDB.GetDB();
+            DateTime startDate = new DateTime(year, month, 1);
+            DateTime endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+            string discIds = string.Join(",", disciplinesPrepod.Select(s => s.ID));
+            string query = $"SELECT * FROM journal j, student s WHERE j.discipline_id IN ({discIds}) and j.day >= '{startDate.ToShortDateString()}' and j.day <= '{endDate.ToShortDateString()}' AND j.student_id = s.id";
+            if (mySqlDB.OpenConnection())
+            {
+                foreach (var disc in disciplinesPrepod)
+                {
+                    List<Journal> jDisc = new List<Journal>();
+                    result.Add(disc, jDisc);
+                }
+                using (MySqlCommand mc = new MySqlCommand(query, mySqlDB.sqlConnection))
+                using (MySqlDataReader dr = mc.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        int discId = dr.GetInt32("discipline_id");
+                        var dJournal = result.First(s => s.Key.ID == discId);
+                        dJournal.Value.Add(new Journal {
+                         DisciplineId = discId,
+                          StudentId = dr.GetInt32("student_id"),
+                           Day = dr.GetDateTime("day"),
+                            Value = dr.GetString("value"), 
+                             Student = new Student { GroupId = dr.GetInt32("group_id") }
+                        });
+                    }
+                }
+                mySqlDB.CloseConnection();
+            }
+            return result;
+        }
+
+        internal List<Discipline> SelectDisciplinesByPrepod(Prepod selectedPrepod)
+        {
+            List<Discipline> disciplines = new List<Discipline>();
+            string query = "SELECT * FROM discipline WHERE prepod_id = " + selectedPrepod.ID;
+            var mySqlDB = MySqlDB.GetDB();
+            if (mySqlDB.OpenConnection())
+            {
+                using (MySqlCommand mc = new MySqlCommand(query, mySqlDB.sqlConnection))
+                using (MySqlDataReader dr = mc.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        disciplines.Add(new Discipline
+                        {
+                            ID = dr.GetInt32("id"),
+                             PrepodId = dr.GetInt32("prepod_id"),
+                              Title = dr.GetString("title")
+                        });
+                    }
+                }
+                mySqlDB.CloseConnection();
+            }
+            return disciplines;
+        }
+
+        internal List<Prepod> SelectAllPrepods()
+        {
+            List<Prepod> prepods = new List<Prepod>();
+            string query = "select * from prepods";
+            var mySqlDB = MySqlDB.GetDB();
+            if (mySqlDB.OpenConnection())
+            {
+                using (MySqlCommand mc = new MySqlCommand(query, mySqlDB.sqlConnection))
+                using (MySqlDataReader dr = mc.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        prepods.Add(new Prepod {
+                            ID = dr.GetInt32("id"),
+                            FirstName = dr.GetString("firstName"),
+                            LastName = dr.GetString("lastName")
+                       });
+                    }
+                }
+                mySqlDB.CloseConnection();
+            }
+            return prepods;
+        }
+
         internal List<Student> SelectStudentsByGroup(Group selectedGroup)
         {
             int id = selectedGroup?.ID ?? 0;

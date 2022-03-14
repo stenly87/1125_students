@@ -31,7 +31,7 @@ namespace WpfApp15.ViewModels
         {
             currentPageControl = new CurrentPageControl();
             currentPageControl.PageChanged += CurrentPageControl_PageChanged;
-            currentPageControl.SetPage(new OptionPage());
+            currentPageControl.SetPage(new GenerateXlsxPage());
             CreateGroup = new CommandVM(() => {
                 currentPageControl.SetPage(new EditGroupPage(new EditGroupVM(currentPageControl)));
             });
