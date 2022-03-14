@@ -111,36 +111,26 @@ namespace WpfApp15.ViewModels
                         sheet.Range[$"A{nRow}"].NumberValue = nCount++;
                         sheet.Range[$"B{nRow}"].Text = $"{discipline.Title} {group.Title}";
                         sheet.Range[$"C{nRow}"].NumberValue = studCount;
-                        
+
                         int count5 = jGroup.Count(s => s.Value == "5");
                         total5 += count5;
-                        sheet.Range[$"D{nRow}"].NumberValue = count5;
-                        sheet.Range[$"E{nRow}"].NumberFormat =  "0.00%";
-                        sheet.Range[$"E{nRow}"].NumberValue = (double)count5 / studCount;
+                        WriteValueRow(sheet, "D", "E", nRow, studCount, count5);
 
                         int count4 = jGroup.Count(s => s.Value == "4");
                         total4 += count4;
-                        sheet.Range[$"F{nRow}"].NumberValue = count4;
-                        sheet.Range[$"G{nRow}"].NumberFormat = "0.00%";
-                        sheet.Range[$"G{nRow}"].NumberValue = (double)count4 / studCount;
+                        WriteValueRow(sheet, "F", "G", nRow, studCount, count4);
 
                         int count3 = jGroup.Count(s => s.Value == "3");
                         total3 += count3;
-                        sheet.Range[$"H{nRow}"].NumberValue = count3;
-                        sheet.Range[$"I{nRow}"].NumberFormat = "0.00%";
-                        sheet.Range[$"I{nRow}"].NumberValue = (double)count3 / studCount;
+                        WriteValueRow(sheet, "H", "I", nRow, studCount, count3);
 
                         int count2 = jGroup.Count(s => s.Value == "2");
                         total2 += count2;
-                        sheet.Range[$"J{nRow}"].NumberValue = count2;
-                        sheet.Range[$"K{nRow}"].NumberFormat = "0.00%";
-                        sheet.Range[$"K{nRow}"].NumberValue = (double)count2 / studCount;
+                        WriteValueRow(sheet, "J", "K", nRow, studCount, count2);
 
                         int countNA = jGroup.Count(s => s.Value == @"н\a");
                         totalNA += countNA;
-                        sheet.Range[$"J{nRow}"].NumberValue = countNA;
-                        sheet.Range[$"K{nRow}"].NumberFormat = "0.00%";
-                        sheet.Range[$"K{nRow}"].NumberValue = (double)countNA / studCount;
+                        WriteValueRow(sheet, "L", "M", nRow, studCount, countNA);
 
                         sheet.Range[$"N{nRow}"].NumberValue = count5 + count4 + count3 + count2 + countNA;
                         totalValue += count5 + count4 + count3 + count2 + countNA;
@@ -152,7 +142,7 @@ namespace WpfApp15.ViewModels
 
                         sheet.Range[$"Q{nRow}"].NumberFormat = "0.00%";
                         sheet.Range[$"Q{nRow}"].NumberValue = ((double)count4 + count5 + count3) / studCount;
-                        
+
                         nRow++;
                     }
                 }
@@ -203,6 +193,13 @@ namespace WpfApp15.ViewModels
                 file_stream.Close();
 
             });
+        }
+
+        private static void WriteValueRow(Worksheet sheet, string col1, string col2, int nRow, int studCount, int count5)
+        {
+            sheet.Range[$"{col1}{nRow}"].NumberValue = count5;
+            sheet.Range[$"{col2}{nRow}"].NumberFormat = "0.00%";
+            sheet.Range[$"{col2}{nRow}"].NumberValue = (double)count5 / studCount;
         }
 
         private List<Journal> SelectJournalValuesByGroup(Group group, List<Journal> journals)
