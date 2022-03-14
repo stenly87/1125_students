@@ -192,6 +192,7 @@ namespace WpfApp15.ViewModels
                 wbToStream.SaveToStream(file_stream);
                 file_stream.Close();
 
+                Process.Start("Explorer", Environment.CurrentDirectory + @"\To_stream.xlsx");
             });
         }
 
